@@ -1,82 +1,187 @@
 import React, { useState, useEffect } from 'react'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function signup() {
     const [email, setEmail] = useState("");
-    const [password1, setPassword1] = useState("");
+    const [emailError, setEmailError] = useState(true);
+    const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
+    const [passwordError, setPasswordError] = useState(true);
     const [movieChoice, setMovieChoice] = useState("");
+    const [movieError, setMovieError] = useState(true);
+    const notifyError = (error: String) =>
+        toast.error(error, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+        });
+
+    const notifySuccess = (message: String) =>
+        toast.success(message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+        });
 
     const handleEmailChange = (event) => {
-        setEmail(event.target.value);
+        const email = event.target.value;
+        setEmail(email);
+        setEmailError(!validateEmail(email));
     };
 
     const handlePassword1Change = (event) => {
-        setPassword1(event.target.value);
+        const password = event.target.value;
+        setPassword(password);
+        setPasswordError(!validatePassword(password));
     };
 
     const handlePassword2Change = (event) => {
-        setPassword2(event.target.value);
+        const password2 = event.target.value;
+        setPassword2(password2);
     };
 
     const handleMovieChoiceChange = (event) => {
-        setMovieChoice(event.target.value);
+        const movieChoice = event.target.value;
+        setMovieChoice(movieChoice);
+        if (movieChoice == '' || movieChoice == 'Favorite movie genre...') {
+            setMovieError(true)
+        } else {
+            setMovieError(false);
+        }
     };
 
     const handleRegister = async () => {
-        console.log(email, password1, password2, movieChoice);
+        if (email == '' || password == '' || password2 == '' || movieError) {
+            notifyError("Please provide all required information.")
+        } else if (emailError == true) {
+            notifyError("Email is not valid.")
+        } else if (passwordError == true) {
+            notifyError("Password must contain at least 8 characters and have at least one symbol and number.")
+        } else if (!matchPasswords(password, password2)) {
+            notifyError("Passwords do not match.")
+        } else if (!agreesToTerms) {
+            notifyError("You must agree to the terms and conditions before signing up.")
+        } else {
+            console.log("Signed up successfully.");
+            try {
+                const response = await fetch("/api/signup", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    email,
+                    password: password,
+                    movieChoice,
+                  }),
+                });
+            
+                if (!response.ok) {
+                  const error = await response.json();
+                  throw new Error(error.message);
+                }
+                notifySuccess("Signed up successfully! Redirecting...");
+                console.log("Signed up successfully.");
+                setTimeout(() => {
+                    window.location.href = "/login";
+                  }, 2000);
+              } catch (error) {
+                notifyError(String(error));
+              }
+            
+        }
     };
 
     const [agreesToTerms, setAgreesToTerms] = useState(false);
     const handleAgreeToTermsChange = (event) => {
         setAgreesToTerms(event.target.checked);
     };
+    const validateEmail = (email) => {
+        const regEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regEmail.test(String(email).toLowerCase());
+    };
+    const validatePassword = (password) => {
+        const regPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/
+        return regPassword.test(String(password))
+    }
+
+    const matchPasswords = (password, password2) => {
+        if (password === password2) {
+            return true
+        } else {
+            return false
+        }
+    };
 
     return (
         <>
-            <h3>Create a new account</h3>
-            <div className="container px-1">
-                <div className="col p-1">
-                    <div className="input-group mb-3">
-                        <input type="text" value={email} onChange={handleEmailChange} className="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" />
-                    </div>
-                    <div className="input-group mb-3">
-                        <input type="password" value={password1} onChange={handlePassword1Change} className="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" />
-                    </div>
-                    <div className="input-group mb-3">
-                        <input type="password" value={password2} onChange={handlePassword2Change} className="form-control" placeholder="Confirm Password" aria-label="ConfirmPassword" aria-describedby="basic-addon1" />
-                    </div>
-                    <div className="input-group mb-3">
-                        <select className="form-select" value={movieChoice} onChange={handleMovieChoiceChange}>
-                            <option selected>Favorite movie genre...</option>
-                            <hr />
-                            <option value="1">Drama</option>
-                            <option value="2">Comedy</option>
-                            <option value="3">Action</option>
-                            <option value="4">Sci-fi</option>
-                            <option value="5">Animation</option>
-                            <option value="6">History</option>
-                            <option value="7">Horror</option>
-                            <option value="8">Romance</option>
-                        </select>
-                    </div>
-                    <div className="input-group mb-3">
-                        <div className="input-group-text mx-2">
-                            <input
-                                className="form-check-input mt-0"
-                                id="accToS"
-                                type="checkbox"
-                                value=""
-                                aria-label="Checkbox for following text input"
-                                checked={agreesToTerms}
-                                onChange={handleAgreeToTermsChange}
-                            />
+            <ToastContainer position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+            />
+            <div className="container m-1 p-2 bg-light rounded border border-secondary">
+                <h3>Create a new account</h3>
+                <div className="container px-1">
+                    <div className="col p-1">
+                        <div className="input-group mb-3">
+                            <input type="text" value={email} onChange={handleEmailChange} className="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" />
                         </div>
-                        Agree to the <a className='ps-1' href="https://i.imgflip.com/64sz4u.png?a475440g" target="_blank"> terms and conditions</a>
+                        <div className="input-group mb-3">
+                            <input type="password" value={password} onChange={handlePassword1Change} className="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" />
+                        </div>
+                        <div className="input-group mb-3">
+                            <input type="password" value={password2} onChange={handlePassword2Change} className="form-control" placeholder="Confirm Password" aria-label="ConfirmPassword" aria-describedby="basic-addon1" />
+                        </div>
+                        <div className="input-group mb-3">
+                            <select className="form-select" value={movieChoice} onChange={handleMovieChoiceChange}>
+                                <option selected>Favorite movie genre...</option>
+                                <option value="1">Drama</option>
+                                <option value="2">Comedy</option>
+                                <option value="3">Action</option>
+                                <option value="4">Sci-fi</option>
+                                <option value="5">Animation</option>
+                                <option value="6">History</option>
+                                <option value="7">Horror</option>
+                                <option value="8">Romance</option>
+                            </select>
+                        </div>
+                        <div className="input-group mb-3">
+                            <div className="input-group-text mx-2">
+                                <input
+                                    className="form-check-input mt-0"
+                                    id="accToS"
+                                    type="checkbox"
+                                    value=""
+                                    aria-label="Checkbox for following text input"
+                                    checked={agreesToTerms}
+                                    onChange={handleAgreeToTermsChange}
+                                />
+                            </div>
+                            Agree to the <a className='ps-1' href="https://i.imgflip.com/64sz4u.png?a475440g" target="_blank"> terms and conditions</a>
+                        </div>
+                        <div>
+                            <button className="btn btn-dark" onClick={handleRegister} type="button">Register</button>
+                        </div>
+                        <span>Already a member?<a className='my-1 ps-1' href="/login">Log in here</a></span>
                     </div>
-                    <div>
-                        <button className="btn btn-dark" onClick={handleRegister} type="button">Register</button>
-                    </div>
-                    <span>Already a member?<a className='my-1 ps-1' href="url">Log in here</a></span>
                 </div>
             </div>
         </>
