@@ -1,11 +1,41 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const userSchema = new mongoose.Schema({
-    email: String,
-    password: String,
-    favMovie: String,
+const userSchema = new Schema({
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    favGenre: {
+        type: [{
+            type: String,
+            required: true,
+            enum: ['Drama', 'Comedy', 'Action', 'Sci-fi', 'Animation', 'History', 'Horror', 'Romance']
+        }]
+    }
+}, {
+    collection: 'users',
 });
 
-const User = mongoose.model('User', userSchema);
+userSchema.pre('save', async function save(next) {
+    if (!this.isModified('password')) return next();
+    try {
+        const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
+        this.password = await bcrypt.hash(this.password, salt);
+        return next();
+    } catch (err) {
+        return next(err);
+    }
+});
 
-module.exports = User;
+userSchema.methods.validatePassword = async function validatePassword(data) {
+    return bcrypt.compare(data, this.password);
+};
+
+// Here User will create a new collection called 'users'
+module.exports = mongoose.model('User', userSchema);

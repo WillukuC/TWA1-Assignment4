@@ -1,24 +1,23 @@
-const express = require('express');
-const router = express.Router();
-const { connect, mongoose, url } = require('../database/database');
-const User = require('../models/user.model');
-const client = mongoose.connection;
+const User = require('../models/user.model')
 
-async function createUser(userData) {
-    console.log("Howdy! Step one of user creation, inbound!")
-    const result = client.insertOne(userData);
-    return result;
+async function registerNewUser(userDocument) {
+    const newUser = new User(userDocument)
+    await newUser.save()
+    return newUser
 }
 
-async function verifyUser(userData) {
+async function loginUser() {
+    const userInfo = await User.findOne().sort({ created_at: 1 }).populate('assigned_to');
+    return userInfo
 }
 
-async function getMoviesByGenre(genre) {
-
+async function displayMovies(supportLevel) {
+    const userInfo = await User.findOne({ level: supportLevel }).sort({ created_at: 1 }).populate('assigned_to');
+    return userInfo;
 }
 
 module.exports = {
-    createUser,
-    verifyUser,
-    getMoviesByGenre
+    registerNewUser,
+    loginUser,
+    displayMovies,
 }
