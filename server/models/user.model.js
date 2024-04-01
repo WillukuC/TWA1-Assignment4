@@ -1,11 +1,22 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
+
+SALT_WORK_FACTOR = 10;
+
+var validateEmail = function(email) {
+    var re = /^[A-Za-z0-9^@]+@[A-Za-z0-9^@]+\.[A-Za-z0-9^@]+$/;
+    return re.test(email)
+};
 
 const userSchema = new Schema({
     email: {
         type: String,
+        trim: true,
+        lowercase: true,
         required: true,
-        unique: true
+        unique: true,
+        validate: [validateEmail, 'Please fill a valid email address'],
     },
     password: {
         type: String,
