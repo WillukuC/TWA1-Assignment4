@@ -8,7 +8,7 @@ function signup() {
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
     const [passwordError, setPasswordError] = useState(true);
-    const [movieChoice, setMovieChoice] = useState("");
+    const [favGenre, setFavGenre] = useState("");
     const [movieError, setMovieError] = useState(true);
     const notifyError = (error: String) =>
         toast.error(error, {
@@ -52,9 +52,9 @@ function signup() {
     };
 
     const handleMovieChoiceChange = (event) => {
-        const movieChoice = event.target.value;
-        setMovieChoice(movieChoice);
-        if (movieChoice == '' || movieChoice == 'Favorite movie genre...') {
+        const favGenre = event.target.value;
+        setFavGenre(favGenre);
+        if (favGenre == '' || favGenre == 'Favorite movie genre...') {
             setMovieError(true)
         } else {
             setMovieError(false);
@@ -75,20 +75,21 @@ function signup() {
         } else {
             console.log("Signed up successfully.");
             try {
-                const response = await fetch("/api/signup", {
+                const response = await fetch("http://localhost:8080/register", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
                     email,
-                    password: password,
-                    movieChoice,
+                    password,
+                    favGenre,
                   }),
                 });
             
                 if (!response.ok) {
                   const error = await response.json();
+                  console.log(error);
                   throw new Error(error.message);
                 }
                 notifySuccess("Signed up successfully! Redirecting...");
@@ -108,7 +109,7 @@ function signup() {
         setAgreesToTerms(event.target.checked);
     };
     const validateEmail = (email) => {
-        const regEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const regEmail = /^[A-Za-z0-9^@]+@[A-Za-z0-9^@]+.[A-Za-z0-9^@]+$/;
         return regEmail.test(String(email).toLowerCase());
     };
     const validatePassword = (password) => {
@@ -151,16 +152,16 @@ function signup() {
                             <input type="password" value={password2} onChange={handlePassword2Change} className="form-control" placeholder="Confirm Password" aria-label="ConfirmPassword" aria-describedby="basic-addon1" />
                         </div>
                         <div className="input-group mb-3">
-                            <select className="form-select" value={movieChoice} onChange={handleMovieChoiceChange}>
+                            <select className="form-select" value={favGenre} onChange={handleMovieChoiceChange}>
                                 <option selected>Favorite movie genre...</option>
-                                <option value="1">Drama</option>
-                                <option value="2">Comedy</option>
-                                <option value="3">Action</option>
-                                <option value="4">Sci-fi</option>
-                                <option value="5">Animation</option>
-                                <option value="6">History</option>
-                                <option value="7">Horror</option>
-                                <option value="8">Romance</option>
+                                <option value="Drama">Drama</option>
+                                <option value="Comedy">Comedy</option>
+                                <option value="Action">Action</option>
+                                <option value="Sci-fi">Sci-fi</option>
+                                <option value="Animation">Animation</option>
+                                <option value="History">History</option>
+                                <option value="Horror">Horror</option>
+                                <option value="Romance">Romance</option>
                             </select>
                         </div>
                         <div className="input-group mb-3">

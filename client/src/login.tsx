@@ -19,7 +19,7 @@ function login() {
     const [emailError, setEmailError] = useState(true);
     const [password, setPassword] = useState("");
     const [authenticated, setAuthenticated] = useState(false);
-    const [movieChoice, setMovieChoice] = useState("");
+    const [favGenre, setFavGenre] = useState("");
     const notifyError = (error: String) =>
         toast.error(error, {
             position: "top-center",
@@ -79,10 +79,32 @@ function login() {
             notifyError('Username or password is not valid')
 
         } else if (emailError == false && authUser(email, password)) {
-            console.log("Successfully logged in");
-            notifySuccess("Login successful! Redirecting...")
-            const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gQW5kcmV3IEFJIGlzIG1pZ2h0IiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-            saveJwt(jwt);
+            try {
+                const response = await fetch("http://localhost:8080/login", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    email,
+                    password,
+                  }),
+                });
+            
+                if (!response.ok) {
+                  const error = await response.json();
+                  console.log(error);
+                  throw new Error(error.message);
+                }
+                notifySuccess("Signed up successfully! Redirecting...");
+                saveJwt(response.headers.get("jwt"));
+                console.log("Signed up successfully.");
+                setTimeout(() => {
+                    window.location.href = "/login";
+                  }, 2000);
+              } catch (error) {
+                notifyError(String(error));
+              }
             setTimeout(() => {
                 window.location.href = "/home";
             }, 2000);

@@ -8,7 +8,7 @@ interface JwtPayload {
 }
 
 function home() {
-    const jwtString = localStorage.getItem('jwtoken');
+    const jwtString = localStorage.getItem('jwt');
     const [email, setEmail] = useState<string>("");
     const [movie, setMovie] = useState<string>("");
     const [authenticated, setAuthenticated] = useState<boolean>(false);
@@ -39,7 +39,7 @@ function home() {
 
 
     const handleLogout = () => {
-        localStorage.removeItem('jwtoken')
+        localStorage.removeItem('jwt')
         window.location.href = "/login";
     }
 
