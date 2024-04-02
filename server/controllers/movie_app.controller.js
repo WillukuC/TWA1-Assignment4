@@ -1,3 +1,5 @@
+const path = require("path");
+const dotenv = require('dotenv').config({path: path.join(__dirname, '../../.env')});
 const User = require('../models/user.model')
 const bcrypt = require('bcrypt')
 const { client } = require('../database/database')
@@ -25,7 +27,6 @@ async function registerNewUser(userDocument) {
  */
 async function loginUser(userDocument) {
     let existingUser
-
     try {
         existingUser = await User.findOne({ email: userDocument.email })
 
@@ -36,7 +37,7 @@ async function loginUser(userDocument) {
     } catch(err) {
         return next(err)
     }
-    
+
     const isMatch = await bcrypt.compare(userDocument.password, existingUser.password);
 
     if (isMatch) {
@@ -45,7 +46,7 @@ async function loginUser(userDocument) {
         };
         const token = await jwt.sign (
             payload,
-            process.env.SECRET,
+            dotenv.parsed.SECRET,
             {
                 expiresIn: 10000
             })
@@ -61,8 +62,6 @@ async function loginUser(userDocument) {
 }
 
 async function displayMovies(favGenre) {
-    console.log(favGenre);
-
     const movies = [];
     const moviesCursor = await movieCollection.find({ genres: favGenre.favGenre })
 
