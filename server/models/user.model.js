@@ -44,9 +44,5 @@ userSchema.pre('save', async function save(next) {
     }
 });
 
-userSchema.methods.validatePassword = async function validatePassword(data) {
-    return bcrypt.compare(data, this.password);
-};
-
 // Here User will create a new collection called 'users'
 module.exports = mongoose.model('User', userSchema);

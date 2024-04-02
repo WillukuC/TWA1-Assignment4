@@ -3,7 +3,7 @@ const app = express()
 const cors = require('cors');
 const morgan = require('morgan');
 const { connect } = require('./database/db_mongoose')
-const moviesRouter = require('./routers/movies.router')
+const moviesRouter = require('./routers/movie_app.router')
 
 app.use(cors());
 app.use(morgan('tiny'));
@@ -38,7 +38,7 @@ app.use(errorHandler)
 
 
 const port = process.env.PORT || 8080;
-app.listen(port, () => {
-    connect()
+app.listen(port, async function() {
+    await connect()
     console.log("Server listening on port " + port)
 })
