@@ -42,10 +42,18 @@ async function loginUser(userDocument) {
 }
 
 async function displayMovies(favGenre) {
-    const movies = await movieCollection.find({ genres: favGenre }) 
+    console.log(favGenre);
 
-    console.log(movies)
+    const movies = [];
+    const moviesCursor = await movieCollection.find({ genres: favGenre.favGenre })
 
+    let counter = 0;
+    while(moviesCursor.hasNext() && counter < 25) {
+        movies.push(await moviesCursor.next());
+        counter++;
+    }
+
+    console.log(movies);
     return movies;
 }
 

@@ -49,7 +49,7 @@ router.get('/movies', async function (req, res) {
     const favMovie = req.body
 
     try {
-        const movies = appController.displayMovies(favMovie)
+        const movies = await appController.displayMovies(favMovie)
 
         res.status(200)
         res.send({ message: 'Fetch movies successful', movies: movies })
