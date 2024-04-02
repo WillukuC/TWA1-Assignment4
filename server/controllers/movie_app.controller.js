@@ -1,6 +1,7 @@
 const User = require('../models/user.model')
 const bcrypt = require('bcrypt')
 const { client } = require('../database/database')
+const jwt = require('jsonwebtoken')
 
 const movieCollection = client.db('movie_app').collection('movies');
 
@@ -23,6 +24,8 @@ async function registerNewUser(userDocument) {
  * @returns true if login successful, false otherwise
  */
 async function loginUser(userDocument) {
+    let existingUser
+
     try {
         existingUser = await User.findOne({ email: userDocument.email })
 
@@ -33,12 +36,28 @@ async function loginUser(userDocument) {
     } catch(err) {
         return next(err)
     }
-
-    const validPass = await bcrypt.compare(userDocument.password, existingUser.password);
-
-    console.log(validPass);
     
-    return validPass;
+    const isMatch = await bcrypt.compare(userDocument.password, existingUser.password);
+
+    if (isMatch) {
+        const payload = {
+            userId: existingUser._id
+        };
+        const token = await jwt.sign (
+            payload,
+            process.env.SECRET,
+            {
+                expiresIn: 10000
+            })
+        return {
+            status: 200,
+            message: {
+                token
+            }
+        }
+    }
+
+    return isMatch;
 }
 
 async function displayMovies(favGenre) {
