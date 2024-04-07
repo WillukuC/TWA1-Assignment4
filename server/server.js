@@ -11,6 +11,8 @@ app.use(cors());
 app.use(morgan('tiny'));
 app.use(express.json());
 
+app.use('/', express.static(path.join(__dirname, 'dist')))
+
 // Health check 
 app.get('/health', function(req, res) {
     res.status(200);
@@ -18,7 +20,7 @@ app.get('/health', function(req, res) {
   })
 
 //Routers
-app.use('/', moviesRouter)
+app.use('/api', moviesRouter)
 
 //Error handler
 function errorHandler(err, req, res, next) {
