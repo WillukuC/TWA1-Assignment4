@@ -32,8 +32,8 @@ function home() {
             } catch (error) {
                 console.error('Error decoding JWT:', error);
             }
-        } else {
-            window.location.href = "/login";
+        // } else {
+        //     window.location.href = "/login";
         }
     };
 

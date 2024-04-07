@@ -4,16 +4,16 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function login() {
-    const users = [
-        {
-            email: 'user1@example.com',
-            password: 'password1',
-        },
-        {
-            email: 'user2@example.com',
-            password: 'password2',
-        },
-    ];
+    // const users = [
+    //     {
+    //         email: 'user1@example.com',
+    //         password: 'password1',
+    //     },
+    //     {
+    //         email: 'user2@example.com',
+    //         password: 'password2',
+    //     },
+    // ];
 
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState(true);
@@ -53,10 +53,10 @@ function login() {
         }
     };
 
-    const authUser = (email, password) => {
-        const user = users.find(user => user.email === email && user.password === password);
-        return user ? true : false;
-    };
+    // const authUser = (email, password) => {
+    //     const user = users.find(user => user.email === email && user.password === password);
+    //     return user ? true : false;
+    // };
 
     const validateEmail = (email) => {
         const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -74,13 +74,13 @@ function login() {
 
             notifyError('Please provide an email and password')
 
-        } else if (!authUser(email, password)) {
+        // } else if (!authUser(email, password)) {
 
-            notifyError('Username or password is not valid')
+        //     notifyError('Username or password is not valid')
 
-        } else if (emailError == false && authUser(email, password)) {
+        } else if (emailError == false) {
             try {
-                const response = await fetch("http://localhost:8080/login", {
+                const response = await fetch("http://localhost:8080/api/login", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -96,27 +96,25 @@ function login() {
                   console.log(error);
                   throw new Error(error.message);
                 }
-                notifySuccess("Signed up successfully! Redirecting...");
-                saveJwt(response.headers.get("jwt"));
-                console.log("Signed up successfully.");
-                setTimeout(() => {
-                    window.location.href = "/login";
-                  }, 2000);
+                notifySuccess("Logged in successfully! Redirecting...");
+                const { token } = await response.json();
+                console.log(token);
+                localStorage.setItem("jwt", token);
+                // setTimeout(() => {
+                //     window.location.href = "/login";
+                //   }, 2000);
               } catch (error) {
                 notifyError(String(error));
               }
-            setTimeout(() => {
-                window.location.href = "/home";
-            }, 2000);
+            // setTimeout(() => {
+            //     window.location.href = "/home";
+            // }, 2000);
         } else {
             notifyError("An error has occured. Please try again later.")
         }
 
     };
 
-    const saveJwt = (jwt) => {
-        localStorage.setItem("jwt", jwt);
-    };
 
     return (
         <>
