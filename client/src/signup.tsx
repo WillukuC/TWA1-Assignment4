@@ -138,10 +138,10 @@ function signup() {
                 pauseOnHover
                 theme="colored"
             />
-            <div className="container m-1 p-2 bg-light rounded border border-secondary">
-                <h3>Create a new account</h3>
-                <div className="container px-1">
+            <div className="container-fluid p-2 bg-light rounded border border-secondary" style={{ maxWidth: '20%' }}>
+                <div className="container px-1 d-flex justify-content-center text-center">
                     <div className="col p-1">
+                    <h3 className="mb-4">Create a new account</h3>
                         <div className="input-group mb-3">
                             <input type="text" value={email} onChange={handleEmailChange} className="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" />
                         </div>
