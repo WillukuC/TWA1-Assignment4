@@ -1,6 +1,9 @@
+const path = require("path");
+const dotenv = require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 const express = require('express')
 const router = express.Router()
 const appController = require('../controllers/movie_app.controller')
+const jwt = require('jsonwebtoken')
 
 //Post route to create new user on register
 router.post('/register', async function (req, res) {
@@ -22,15 +25,15 @@ router.post('/register', async function (req, res) {
 
 //Get route to get tickets based on priority (Oldest)
 router.post('/login', async function (req, res) {
-    
+
     const loginUserBody = req.body
 
     try {
         const loginUser = await appController.loginUser(loginUserBody)
 
-        if(!loginUser) {
+        if (!loginUser) {
             res.status(401)
-            res.send({message: 'Incorrect credentials'})
+            res.send({ message: 'Incorrect credentials' })
         } else {
             res.status(200)
             res.send({ message: 'Login successful', user: loginUser })
@@ -45,19 +48,27 @@ router.post('/login', async function (req, res) {
 
 //Update route to update the assignee of a ticket
 router.get('/movies', async function (req, res) {
-    
-    const favMovie = req.body
+    const jwt_token = req.header("token")
+    if (!jwt_token) return res.status(401).send({ message: 'Auth Error' });
 
     try {
-        const movies = await appController.displayMovies(favMovie)
+        const decoded = jwt.verify(jwt_token, process.env.SECRET)
+        req.user = decoded.user
+        try {
+            const movies = await appController.displayMovies(jwt_token)
 
-        res.status(200)
-        res.send({ message: 'Fetch movies successful', movies: movies })
+            res.status(200)
+            res.send({ message: 'Fetch movies successful', movies: movies })
+        }
+        catch (err) {
+            console.error('err: ', err.message)
+            res.status(400)
+            res.send({ message: 'Incorrect body', error: err.message })
+        }
     }
     catch (err) {
-        console.error('err: ', err.message)
-        res.status(400)
-        res.send({ message: 'Incorrect body', error: err.message })
+        console.error(err)
+        res.status(500).send({ message: 'Invalid Token' })
     }
 })
 

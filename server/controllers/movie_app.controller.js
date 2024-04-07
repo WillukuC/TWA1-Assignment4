@@ -1,5 +1,5 @@
 const path = require("path");
-const dotenv = require('dotenv').config({path: path.join(__dirname, '../../.env')});
+const dotenv = require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 const User = require('../models/user.model')
 const bcrypt = require('bcrypt')
 const { client } = require('../database/database')
@@ -18,8 +18,8 @@ async function registerNewUser(userDocument) {
     return newUser
 }
 
-        // TODO: send JWT token with a secret if passwords match,
-        // sending back the token in message body
+// TODO: send JWT token with a secret if passwords match,
+// sending back the token in message body
 /**
  * Logs in an existing user
  * @param {JSON} userDocument holds the email and password used for login attempt
@@ -34,7 +34,7 @@ async function loginUser(userDocument) {
         if (!existingUser) {
             return false
         }
-    } catch(err) {
+    } catch (err) {
         return next(err)
     }
 
@@ -44,7 +44,7 @@ async function loginUser(userDocument) {
         const payload = {
             userId: existingUser._id
         };
-        const token = await jwt.sign (
+        const token = await jwt.sign(
             payload,
             dotenv.parsed.SECRET,
             {
@@ -61,12 +61,12 @@ async function loginUser(userDocument) {
     return isMatch;
 }
 
-async function displayMovies(favGenre) {
+async function displayMovies(jwt_token) {
     const movies = [];
     const moviesCursor = await movieCollection.find({ genres: favGenre.favGenre })
 
     let counter = 0;
-    while(moviesCursor.hasNext() && counter < 25) {
+    while (moviesCursor.hasNext() && counter < 25) {
         movies.push(await moviesCursor.next());
         counter++;
     }
