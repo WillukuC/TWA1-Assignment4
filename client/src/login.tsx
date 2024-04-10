@@ -100,15 +100,15 @@ function login() {
                 const { token } = await response.json();
                 console.log(token);
                 localStorage.setItem("jwt", token);
-                // setTimeout(() => {
-                //     window.location.href = "/login";
-                //   }, 2000);
+                setTimeout(() => {
+                    window.location.href = "/movies";
+                }, 2000);
             } catch (error) {
                 notifyError(String(error));
             }
-            // setTimeout(() => {
-            //     window.location.href = "/";
-            // }, 2000);
+            setTimeout(() => {
+                window.location.href = "/movies";
+            }, 2000);
         } else {
             notifyError("An error has occured. Please try again later.")
         }
