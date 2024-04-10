@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken')
 
 //Post route to create new user on register
 router.post('/register', async function (req, res) {
+    console.log("Registering...");
 
     const newUserBody = req.body
 
@@ -25,6 +26,7 @@ router.post('/register', async function (req, res) {
 
 //Get route to get tickets based on priority (Oldest)
 router.post('/login', async function (req, res) {
+    console.log("Logging in...");
 
     const loginUserBody = req.body
 
@@ -36,7 +38,7 @@ router.post('/login', async function (req, res) {
             res.send({ message: 'Incorrect credentials' })
         } else {
             res.status(200)
-            res.send({ message: 'Login successful', user: loginUser })
+            res.send({ message: 'Login successful', token: loginUser })
         }
     }
     catch (err) {
@@ -48,7 +50,10 @@ router.post('/login', async function (req, res) {
 
 //Update route to update the assignee of a ticket
 router.get('/movies', async function (req, res) {
+    console.log("Displaying movies...");
+    
     const jwt_token = req.header("token")
+
     if (!jwt_token) return res.status(401).send({ message: 'Auth Error' });
 
     try {
