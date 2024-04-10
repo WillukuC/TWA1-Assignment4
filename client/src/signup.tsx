@@ -67,7 +67,7 @@ function signup() {
         } else if (emailError == true) {
             notifyError("Email is not valid.")
         } else if (passwordError == true) {
-            notifyError("Password must contain at least 8 characters and have at least one symbol and number.")
+            notifyError("Password must contain at least 8 characters, at least an upper case and a lower case letter and have at least one symbol and number.")
         } else if (!matchPasswords(password, password2)) {
             notifyError("Passwords do not match.")
         } else if (!agreesToTerms) {
@@ -139,6 +139,7 @@ function signup() {
                 theme="colored"
             />
             <div className="container-fluid p-2 bg-light rounded border border-secondary" style={{ maxWidth: '20%' }}>
+                
                 <div className="container px-1 d-flex justify-content-center text-center">
                     <div className="col p-1">
                     <h3 className="mb-4">Create a new account</h3>
