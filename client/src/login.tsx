@@ -100,6 +100,7 @@ function login() {
                 const { token } = await response.json();
                 console.log(token);
                 localStorage.setItem("jwt", token);
+                localStorage.setItem("email", email);
                 setTimeout(() => {
                     window.location.href = "/movies";
                 }, 2000);
