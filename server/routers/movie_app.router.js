@@ -33,12 +33,16 @@ router.post('/login', async function (req, res) {
     try {
         const loginUser = await appController.loginUser(loginUserBody)
 
+        console.log(loginUser.message.token)
+
         if (!loginUser) {
             res.status(401)
             res.send({ message: 'Incorrect credentials' })
         } else {
             res.status(200)
-            res.send({ message: 'Login successful', token: loginUser })
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({token: loginUser.message.token}))
+            res.send()
         }
     }
     catch (err) {
