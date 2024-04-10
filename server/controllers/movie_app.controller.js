@@ -4,6 +4,7 @@ const User = require('../models/user.model')
 const bcrypt = require('bcrypt')
 const { client } = require('../database/database')
 const jwt = require('jsonwebtoken')
+var ObjectId = require('mongodb').ObjectId
 
 const movieCollection = client.db('movie_app').collection('movies');
 const userCollection = client.db('movie_app').collection('users')
@@ -63,9 +64,10 @@ async function loginUser(userDocument) {
 }
 
 async function displayMovies(uid) {
-    const favGenre = await userCollection.findOne({ userId: uid })
-    
-    const movies = [];
+    const user = await userCollection.findOne({ _id: new ObjectId(uid) })
+    const favGenre = user.favGenre[0]
+    const movieData = []
+    const movies = []
     const moviesCursor = await movieCollection.find({ genres: favGenre })
 
     let counter = 0;
@@ -74,8 +76,10 @@ async function displayMovies(uid) {
         counter++;
     }
 
-    console.log(movies);
-    return movies;
+    movieData.push(favGenre)
+    movieData.push(movies)
+    console.log(movieData);
+    return movieData;
 }
 
 module.exports = {
