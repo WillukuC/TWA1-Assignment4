@@ -67,7 +67,7 @@ function signup() {
         } else if (emailError == true) {
             notifyError("Email is not valid.")
         } else if (passwordError == true) {
-            notifyError("Password must contain at least 8 characters and have at least one symbol and number.")
+            notifyError("Password must contain at least 8 characters, at least an upper case and a lower case letter and have at least one symbol and number.")
         } else if (!matchPasswords(password, password2)) {
             notifyError("Passwords do not match.")
         } else if (!agreesToTerms) {
