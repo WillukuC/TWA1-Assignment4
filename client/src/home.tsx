@@ -1,43 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode'
 
-interface JwtPayload {
-    email: string;
-    movieChoice: string;
-    authenticated: boolean;
-}
 
 function home() {
-    const jwtString = localStorage.getItem('jwt');
+    const jwt = localStorage.getItem('jwt');
     const [email, setEmail] = useState<string>("Not Logged in");
     const [favGenre, setFavGenre] = useState<string>("Genre");
-    const [movies, setMovies] = useState<string>([]);
-    const [authenticated, setAuthenticated] = useState<boolean>(false);
+    const [movies, setMovies] = useState<Object>([]);
 
     useEffect(() => {
-        handleShowInfo();
+        callMovies();
     }, []);
 
-    const handleShowInfo = () => {
-        if (jwtString != null) {
+    const callMovies = async () => {
+        if (jwt != null) {
             try {
-                const decodedJwt = jwtDecode<JwtPayload>(jwtString);
-                const { email, movieChoice, authenticated } = decodedJwt;
-                setEmail(email)
-                setFavGenre(movieChoice)
-                setAuthenticated(authenticated)
+                const response = await fetch("http://localhost:8080/api/movies", {
+                    method: "GET",
+                    headers: {
+                        token: jwt,
+                    }
+                });
 
-                console.log(`Email: ${email}`);
-                console.log(`favGenre choice: ${movieChoice}`);
-                console.log(`Authenticated: ${authenticated}`);
+                if (!response.ok) {
+                    const error = await response.json();
+                    console.log(error);
+                    throw new Error(error.message);
+                }
+                const data = await response.json();
+                console.log(data);
+                setMovies(data);
+
             } catch (error) {
-                console.error('Error decoding JWT:', error);
+                console.log(error);
             }
-            // } else {
-            //     window.location.href = "/login";
+        } else {
+            setTimeout(() => {
+                window.location.href = "/login";
+            }, 2000);
         }
-    };
 
+    }
 
     const handleLogout = () => {
         localStorage.removeItem('jwt')
@@ -53,7 +55,7 @@ function home() {
                     </span>
                     <button className="btn btn-dark" onClick={handleLogout} type="button">Log out</button>
                 </span>
-                
+
                 <div className="container-fluid bg-light rounded border border-secondary" style={{ maxWidth: '90%' }}>
                     <div className="row"><h4>Our movies</h4> </div>
                     <div className="row"><h4>Your favorite favGenre genre: {favGenre}</h4>  </div>
