@@ -9,8 +9,8 @@ interface JwtPayload {
 
 function home() {
     const jwtString = localStorage.getItem('jwt');
-    const [email, setEmail] = useState<string>("");
-    const [movie, setMovie] = useState<string>("");
+    const [email, setEmail] = useState<string>("Not Logged in");
+    const [movie, setMovie] = useState<string>("Genre");
     const [authenticated, setAuthenticated] = useState<boolean>(false);
 
     useEffect(() => {
@@ -32,8 +32,8 @@ function home() {
             } catch (error) {
                 console.error('Error decoding JWT:', error);
             }
-        } else {
-            window.location.href = "/login";
+            // } else {
+            //     window.location.href = "/login";
         }
     };
 
@@ -46,25 +46,23 @@ function home() {
     return (
         <>
             <div>
-                <div className="container">
+                <span className="navbar fixed-top navbar-light bg-light px-2">
+                    <span className="text-decoration text-primary">
+                        {email}
+                    </span>
+                    <button className="btn btn-dark" onClick={handleLogout} type="button">Log out</button>
+                </span>
+                <div className="container-fluid bg-light rounded border border-secondary" style={{ maxWidth: '90%' }}>
+                    <div className="row"><h4>Our movies</h4> </div>
+                    <div className="row"><h4>Your favorite movie genre: {movie}</h4>  </div>
                     <div className="row">
-                        <div className="col-6">
-                            Logged in as: {email}
-                        </div>
-                        <div className="col-6">
-                            <button className="btn btn-dark" onClick={handleLogout} type="button">Log out</button>
-                        </div>
-                    </div>
-                    <div className="row">Our movies</div>
-                    <div className="row">Your favorite movie genre: {movie}</div>
-                    <div className="row">
-                        <div className="col">
+                        <div className="col text-center">
                             Movie 1
                         </div>
-                        <div className="col">
+                        <div className="col text-center">
                             Movie 2
                         </div>
-                        <div className="col">
+                        <div className="col text-center">
                             Movie 3
                         </div>
                     </div>
