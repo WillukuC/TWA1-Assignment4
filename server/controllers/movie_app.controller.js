@@ -6,6 +6,7 @@ const { client } = require('../database/database')
 const jwt = require('jsonwebtoken')
 
 const movieCollection = client.db('movie_app').collection('movies');
+const userCollection = client.db('movie_app').collection('users')
 
 /**
  * Registers a new use by adding it to the database, if it has the proper credentials
@@ -61,9 +62,11 @@ async function loginUser(userDocument) {
     return isMatch;
 }
 
-async function displayMovies(jwt_token) {
+async function displayMovies(uid) {
+    const favGenre = await userCollection.findOne({ userId: uid })
+    
     const movies = [];
-    const moviesCursor = await movieCollection.find({ genres: favGenre.favGenre })
+    const moviesCursor = await movieCollection.find({ genres: favGenre })
 
     let counter = 0;
     while (moviesCursor.hasNext() && counter < 25) {

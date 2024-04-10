@@ -53,9 +53,9 @@ router.get('/movies', async function (req, res) {
 
     try {
         const decoded = jwt.verify(jwt_token, process.env.SECRET)
-        req.user = decoded.user
+        req.userId = decoded.userId
         try {
-            const movies = await appController.displayMovies(jwt_token)
+            const movies = await appController.displayMovies(req.userId)
 
             res.status(200)
             res.send({ message: 'Fetch movies successful', movies: movies })
