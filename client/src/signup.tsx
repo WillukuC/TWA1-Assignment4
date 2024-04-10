@@ -139,6 +139,7 @@ function signup() {
                 theme="colored"
             />
             <div className="container-fluid p-2 bg-light rounded border border-secondary" style={{ maxWidth: '20%' }}>
+                
                 <div className="container px-1 d-flex justify-content-center text-center">
                     <div className="col p-1">
                     <h3 className="mb-4">Create a new account</h3>

@@ -10,7 +10,8 @@ interface JwtPayload {
 function home() {
     const jwtString = localStorage.getItem('jwt');
     const [email, setEmail] = useState<string>("Not Logged in");
-    const [movie, setMovie] = useState<string>("Genre");
+    const [favGenre, setFavGenre] = useState<string>("Genre");
+    const [movies, setMovies] = useState<string>([]);
     const [authenticated, setAuthenticated] = useState<boolean>(false);
 
     useEffect(() => {
@@ -23,11 +24,11 @@ function home() {
                 const decodedJwt = jwtDecode<JwtPayload>(jwtString);
                 const { email, movieChoice, authenticated } = decodedJwt;
                 setEmail(email)
-                setMovie(movieChoice)
+                setFavGenre(movieChoice)
                 setAuthenticated(authenticated)
 
                 console.log(`Email: ${email}`);
-                console.log(`Movie choice: ${movieChoice}`);
+                console.log(`favGenre choice: ${movieChoice}`);
                 console.log(`Authenticated: ${authenticated}`);
             } catch (error) {
                 console.error('Error decoding JWT:', error);
@@ -52,18 +53,22 @@ function home() {
                     </span>
                     <button className="btn btn-dark" onClick={handleLogout} type="button">Log out</button>
                 </span>
+                
                 <div className="container-fluid bg-light rounded border border-secondary" style={{ maxWidth: '90%' }}>
                     <div className="row"><h4>Our movies</h4> </div>
-                    <div className="row"><h4>Your favorite movie genre: {movie}</h4>  </div>
+                    <div className="row"><h4>Your favorite favGenre genre: {favGenre}</h4>  </div>
                     <div className="row">
+                        {/* {movies.map((movie) => (
+                            
+                        ))} */}
                         <div className="col text-center">
-                            Movie 1
+                            favGenre 1
                         </div>
                         <div className="col text-center">
-                            Movie 2
+                            favGenre 2
                         </div>
                         <div className="col text-center">
-                            Movie 3
+                            favGenre 3
                         </div>
                     </div>
                 </div>
