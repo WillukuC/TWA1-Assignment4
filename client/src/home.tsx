@@ -15,7 +15,7 @@ function home() {
     const callMovies = async () => {
         if (jwt != null) {
             try {
-                const response = await fetch("http://localhost:8080/api/movies", {
+                const response = await fetch("/api/movies", {
                     method: "GET",
                     headers: {
                         token: jwt,
