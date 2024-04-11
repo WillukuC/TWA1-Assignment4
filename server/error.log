@@ -1,0 +1,11 @@
+2024-04-11T00:03:17.573Z - SyntaxError: Unexpected token } in JSON at position 60
+    at JSON.parse (<anonymous>)
+    at parse (C:\Users\adm1\Desktop\Courses\4th Semester\CSTWA\TWA1-Assignment4\server\node_modules\body-parser\lib\types\json.js:89:19)
+    at C:\Users\adm1\Desktop\Courses\4th Semester\CSTWA\TWA1-Assignment4\server\node_modules\body-parser\lib\read.js:128:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:203:9)
+    at invokeCallback (C:\Users\adm1\Desktop\Courses\4th Semester\CSTWA\TWA1-Assignment4\server\node_modules\raw-body\index.js:231:16)
+    at done (C:\Users\adm1\Desktop\Courses\4th Semester\CSTWA\TWA1-Assignment4\server\node_modules\raw-body\index.js:220:7)
+    at IncomingMessage.onEnd (C:\Users\adm1\Desktop\Courses\4th Semester\CSTWA\TWA1-Assignment4\server\node_modules\raw-body\index.js:280:7)
+    at IncomingMessage.emit (node:events:525:35)
+    at endReadableNT (node:internal/streams/readable:1358:12)
+    at processTicksAndRejections (node:internal/process/task_queues:83:21)

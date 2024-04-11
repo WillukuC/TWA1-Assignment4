@@ -1,7 +1,9 @@
+const path = require("path");
+const dotenv = require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 const { MongoClient } = require('mongodb');
 
-const url = "mongodb://127.0.0.1:27017"
-const client = new MongoClient(url);
+const uri = process.env.DATABASE
+const client = new MongoClient(uri);
 
 async function connect() {
     // Use connect method to connect to the server

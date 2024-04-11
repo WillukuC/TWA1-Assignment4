@@ -6,6 +6,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const { connect } = require('./database/db_mongoose')
 const moviesRouter = require('./routers/movie_app.router')
+const fs = require('fs')
 
 app.use(cors());
 app.use(morgan('tiny'));

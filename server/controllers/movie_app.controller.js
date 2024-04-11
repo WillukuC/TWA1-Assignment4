@@ -6,8 +6,8 @@ const { client } = require('../database/database')
 const jwt = require('jsonwebtoken')
 var ObjectId = require('mongodb').ObjectId
 
-const movieCollection = client.db('movie_app').collection('movies');
-const userCollection = client.db('movie_app').collection('users')
+const movieCollection = client.db('test').collection('movies');
+const userCollection = client.db('test').collection('users')
 
 /**
  * Registers a new use by adding it to the database, if it has the proper credentials
@@ -15,13 +15,15 @@ const userCollection = client.db('movie_app').collection('users')
  * @returns the new User
  */
 async function registerNewUser(userDocument) {
+    console.log("Registering Part 2");
     const newUser = new User(userDocument)
+    console.log("New User made");
     await newUser.save()
+    console.log("New User saved");
+
     return newUser
 }
 
-// TODO: send JWT token with a secret if passwords match,
-// sending back the token in message body
 /**
  * Logs in an existing user
  * @param {JSON} userDocument holds the email and password used for login attempt

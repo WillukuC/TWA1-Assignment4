@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -34,24 +34,24 @@ function signup() {
             theme: "colored",
         });
 
-    const handleEmailChange = (event) => {
+    const handleEmailChange = (event: any) => {
         const email = event.target.value;
         setEmail(email);
         setEmailError(!validateEmail(email));
     };
 
-    const handlePassword1Change = (event) => {
+    const handlePassword1Change = (event: any) => {
         const password = event.target.value;
         setPassword(password);
         setPasswordError(!validatePassword(password));
     };
 
-    const handlePassword2Change = (event) => {
+    const handlePassword2Change = (event: any) => {
         const password2 = event.target.value;
         setPassword2(password2);
     };
 
-    const handleMovieChoiceChange = (event) => {
+    const handleMovieChoiceChange = (event: any) => {
         const favGenre = event.target.value;
         setFavGenre(favGenre);
         if (favGenre == '' || favGenre == 'Favorite movie genre...') {
@@ -105,19 +105,19 @@ function signup() {
     };
 
     const [agreesToTerms, setAgreesToTerms] = useState(false);
-    const handleAgreeToTermsChange = (event) => {
+    const handleAgreeToTermsChange = (event: any) => {
         setAgreesToTerms(event.target.checked);
     };
-    const validateEmail = (email) => {
+    const validateEmail = (email: any) => {
         const regEmail = /^[A-Za-z0-9^@]+@[A-Za-z0-9^@]+.[A-Za-z0-9^@]+$/;
         return regEmail.test(String(email).toLowerCase());
     };
-    const validatePassword = (password) => {
+    const validatePassword = (password: any) => {
         const regPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/
         return regPassword.test(String(password))
     }
 
-    const matchPasswords = (password, password2) => {
+    const matchPasswords = (password: any, password2: any) => {
         if (password === password2) {
             return true
         } else {

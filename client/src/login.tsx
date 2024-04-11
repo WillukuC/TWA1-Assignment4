@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -18,8 +18,6 @@ function login() {
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState(true);
     const [password, setPassword] = useState("");
-    const [authenticated, setAuthenticated] = useState(false);
-    const [favGenre, setFavGenre] = useState("");
     const notifyError = (error: String) =>
         toast.error(error, {
             position: "top-center",
@@ -43,7 +41,7 @@ function login() {
             theme: "colored",
         });
 
-    const handleEmailChange = (event) => {
+    const handleEmailChange = (event: any) => {
         const email = event.target.value;
         setEmail(email);
         if (!validateEmail(email)) {
@@ -58,12 +56,12 @@ function login() {
     //     return user ? true : false;
     // };
 
-    const validateEmail = (email) => {
+    const validateEmail = (email: any) => {
         const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return reg.test(String(email).toLowerCase());
     };
 
-    const handlePasswordChange = (event) => {
+    const handlePasswordChange = (event: any) => {
         const password = event.target.value
         setPassword(password);
     };

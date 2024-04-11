@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 
 function home() {
     const jwt = localStorage.getItem('jwt');
-    const [email, setEmail] = useState<string>("Not Logged in");
-    const [favGenre, setFavGenre] = useState<string>("Genre");
+    const [email, setEmail] = useState<null | string>("Not Logged in");
+    const [favGenre] = useState<string>("Genre");
     const [moviesResults, setMoviesResults] = useState([]);
 
     useEffect(() => {
@@ -64,7 +64,7 @@ function home() {
                     <div className="row">
                         {moviesResults.map((movie : any) => (
                             <div className="card" style={{ width: '18rem' }}>
-                                <img class="card-img-top" src={movie.poster} alt="Movie Poster"/>
+                                <img className="card-img-top" src={movie.poster} alt="Movie Poster"/>
                                     <div className="card-body">
                                         <h5 className="card-title">{movie.title}</h5>
                                         <p className="card-text">{favGenre} - {movie.year}</p>
