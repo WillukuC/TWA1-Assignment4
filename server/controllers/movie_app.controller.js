@@ -50,7 +50,7 @@ async function loginUser(userDocument) {
         };
         const token = await jwt.sign(
             payload,
-            dotenv.parsed.SECRET,
+            process.env.SECRET,
             {
                 expiresIn: 10000
             })
