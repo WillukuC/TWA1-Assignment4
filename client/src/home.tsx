@@ -28,8 +28,11 @@ function home() {
                     throw new Error(error.message);
                 }
                 const data = await response.json();
-                console.log(data.movies);
-                setMoviesResults(data.movies);
+                console.log(data.movies[0]);
+                console.log(data.movies[1]);
+                console.log();
+                setMoviesResults(data.movies[1]);
+                setFavGenre(data.movies[0]);
 
             } catch (error) {
                 console.log(error);
@@ -58,7 +61,7 @@ function home() {
                     <button className="btn btn-dark" onClick={handleLogout} type="button">Log out</button>
                 </span>
 
-                <div className="container-fluid bg-light rounded border border-secondary" style={{ maxWidth: '90%' }}>
+                <div className="container-fluid bg-light rounded border border-secondary pt-5" style={{ maxWidth: '90%'}}>
                     <div className="row"><h4>Our movies</h4> </div>
                     <div className="row"><h4>Your favorite movie genre: {favGenre}</h4>  </div>
                     <div className="row">
