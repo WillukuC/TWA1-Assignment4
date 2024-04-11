@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 
 function home() {
+    const navigate = useNavigate();
     const jwt = localStorage.getItem('jwt');
     const [email, setEmail] = useState<null | string>("Not Logged in");
     const [favGenre, setFavGenre] = useState<string>("Genre");
@@ -39,7 +40,7 @@ function home() {
             }
         } else {
             setTimeout(() => {
-                window.location.href = "/login";
+                navigate('/login');
             }, 2000);
         }
 
@@ -48,7 +49,7 @@ function home() {
     const handleLogout = () => {
         localStorage.removeItem('jwt')
         localStorage.removeItem('email')
-        window.location.href = "/login";
+        navigate('/login');
     }
 
     return (

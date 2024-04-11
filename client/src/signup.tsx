@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate, Link } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 
 function signup() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState(true);
     const [password, setPassword] = useState("");
@@ -95,7 +97,7 @@ function signup() {
                 notifySuccess("Signed up successfully! Redirecting...");
                 console.log("Signed up successfully.");
                 setTimeout(() => {
-                    window.location.href = "/login";
+                    navigate('/login');
                   }, 2000);
               } catch (error) {
                 notifyError(String(error));
@@ -182,7 +184,7 @@ function signup() {
                         <div>
                             <button className="btn btn-dark" onClick={handleRegister} type="button">Register</button>
                         </div>
-                        <span>Already a member?<a className='my-1 ps-1' href="/login">Log in here</a></span>
+                        <span>Already a member?<Link to="/login" className='my-1 ps-1'>Log in here</Link></span>
                     </div>
                 </div>
             </div>
