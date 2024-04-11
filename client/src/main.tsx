@@ -7,7 +7,7 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const router = createBrowserRouter([
-  { path: "/movies", element: <Home /> }, { path: "/signup", element: <Signup /> }, { path: "/login", element: <Login /> },
+  { path: "/", element: <Login /> },{ path: "/movies", element: <Home /> }, { path: "/signup", element: <Signup /> }, { path: "/login", element: <Login /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

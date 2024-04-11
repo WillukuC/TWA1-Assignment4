@@ -1,19 +1,12 @@
 import { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 function login() {
-    // const users = [
-    //     {
-    //         email: 'user1@example.com',
-    //         password: 'password1',
-    //     },
-    //     {
-    //         email: 'user2@example.com',
-    //         password: 'password2',
-    //     },
-    // ];
+    
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState(true);
@@ -100,13 +93,13 @@ function login() {
                 localStorage.setItem("jwt", token);
                 localStorage.setItem("email", email);
                 setTimeout(() => {
-                    window.location.href = "/movies";
+                    navigate('/movies');
                 }, 2000);
             } catch (error) {
                 notifyError(String(error));
             }
             setTimeout(() => {
-                window.location.href = "/movies";
+                navigate('/movies');
             }, 2000);
         } else {
             notifyError("An error has occured. Please try again later.")
@@ -141,7 +134,7 @@ function login() {
                         <div>
                             <button className="btn btn-dark" onClick={handleLogin} type="button">Login</button>
                         </div>
-                        <span>Not a member?<a className='my-1 ps-1' href="/signup">Sign up here</a></span>
+                        <span>Not a member?<Link to="/signup" className='my-1 ps-1'>Sign up here</Link></span>
                     </div>
                 </div>
             </div>
