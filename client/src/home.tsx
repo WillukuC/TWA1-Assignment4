@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 function home() {
     const jwt = localStorage.getItem('jwt');
     const [email, setEmail] = useState<null | string>("Not Logged in");
-    const [favGenre] = useState<string>("Genre");
+    const [favGenre, setFavGenre] = useState<string>("Genre");
     const [moviesResults, setMoviesResults] = useState([]);
 
     useEffect(() => {
